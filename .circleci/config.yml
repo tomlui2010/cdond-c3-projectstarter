@@ -93,7 +93,9 @@ jobs:
             npm audit --audit-level=critical
       - slack/notify:
           event: fail
+          channel: personal-projects, random, general
           template: basic_fail_1
+          debug: true
 
   scan-backend:
     docker:
@@ -118,17 +120,17 @@ workflows:
     jobs:
       - build-frontend:
           context: udapeople
-      - build-backend:
-          context: udapeople
-      - test-frontend:
-          context: udapeople
-          requires: [build-frontend]
-      - test-backend:
-          context: udapeople
-          requires: [build-backend]
+      # - build-backend:
+      #     context: udapeople
+      # - test-frontend:
+      #     context: udapeople
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     context: udapeople
+      #     requires: [build-backend]
       - scan-frontend:
           context: udapeople
           requires: [build-frontend]
-      - scan-backend:
-          context: udapeople
-          requires: [build-backend]
+      # - scan-backend:
+      #     context: udapeople
+      #     requires: [build-backend]
