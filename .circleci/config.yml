@@ -93,7 +93,8 @@ jobs:
             npm audit --audit-level=critical
       - slack/notify:
           event: fail
-          channel: personal-projects, random, general
+          channel: personal-projects
+          mentions: "<@U06NLJDPAAG>"
           template: basic_fail_1
           debug: true
 
