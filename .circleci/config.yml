@@ -21,7 +21,10 @@ jobs:
           key: frontend-build
       - slack/notify:
           event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
           template: basic_fail_1
+          debug: false
 
   build-backend:
     docker:
@@ -41,7 +44,10 @@ jobs:
           key: backend-build
       - slack/notify:
           event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
           template: basic_fail_1
+          debug: false
 
   test-frontend:
     docker:
@@ -58,21 +64,10 @@ jobs:
             npm run test
       - slack/notify:
           event: fail
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
+          template: basic_fail_1
+          debug: false
                 
   test-backend:
     docker:
@@ -89,7 +84,10 @@ jobs:
             npm run test
       - slack/notify:
           event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
           template: basic_fail_1
+          debug: false
 
   scan-frontend:
     docker:
@@ -110,7 +108,7 @@ jobs:
           channel: "personal-projects"
           mentions: "<@U06NLJDPAAG>"
           template: basic_fail_1
-          debug: true
+          debug: false
 
   scan-backend:
     docker:
@@ -128,24 +126,27 @@ jobs:
             npm audit --audit-level=critical
       - slack/notify:
           event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
           template: basic_fail_1
+          debug: false
 
 workflows:
   default:
     jobs:
       - build-frontend:
           context: udapeople
-      # - build-backend:
-      #     context: udapeople
-      # - test-frontend:
-      #     context: udapeople
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     context: udapeople
-      #     requires: [build-backend]
+      - build-backend:
+          context: udapeople
+      - test-frontend:
+          context: udapeople
+          requires: [build-frontend]
+      - test-backend:
+          context: udapeople
+          requires: [build-backend]
       - scan-frontend:
           context: udapeople
           requires: [build-frontend]
-      # - scan-backend:
-      #     context: udapeople
-      #     requires: [build-backend]
+      - scan-backend:
+          context: udapeople
+          requires: [build-backend]
