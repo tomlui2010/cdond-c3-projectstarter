@@ -121,9 +121,9 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
+      - build-frontend:
           context: udapeople
-      - build-backend
+      - build-backend:
           context: udapeople
       - test-frontend:
           context: udapeople
