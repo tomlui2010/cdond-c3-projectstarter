@@ -116,7 +116,6 @@ jobs:
             npm audit --audit-level=critical
       - slack/notify:
           event: fail
-          mentions: '@thomas louis'
           template: basic_fail_1
 
 workflows:
