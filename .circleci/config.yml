@@ -21,7 +21,6 @@ jobs:
           key: frontend-build
       - slack/notify:
           event: fail
-          mentions: '@thomas louis'
           template: basic_fail_1
 
   build-backend:
@@ -42,7 +41,6 @@ jobs:
           key: backend-build
       - slack/notify:
           event: fail
-          mentions: '@thomas louis'
           template: basic_fail_1
 
   test-frontend:
@@ -60,7 +58,6 @@ jobs:
             npm run test
       - slack/notify:
           event: fail
-          mentions: '@thomas louis'
           template: basic_fail_1
                 
   test-backend:
@@ -78,7 +75,6 @@ jobs:
             npm run test
       - slack/notify:
           event: fail
-          mentions: '@thomas louis'
           template: basic_fail_1
 
   scan-frontend:
@@ -97,7 +93,6 @@ jobs:
             npm audit --audit-level=critical
       - slack/notify:
           event: fail
-          mentions: '@thomas louis'
           template: basic_fail_1
 
   scan-backend:
