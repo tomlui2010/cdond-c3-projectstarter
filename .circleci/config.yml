@@ -135,7 +135,6 @@ jobs:
           name: Checking for known vulnerabilities in frontend
           command: |
             cd frontend
-            npm cache clean --force
             npm install
             npm audit fix --force
             npm audit --audit-level=critical
