@@ -90,7 +90,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "overrides": {
-    "typeorm": "0.3.20"
+    "typeorm": "^0.2.24"
   },
   "jest": {
     "moduleFileExtensions": [
