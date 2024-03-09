@@ -227,9 +227,9 @@ workflows:
       # - scan-frontend:
       #     context: udapeople
       #     requires: [build-frontend]
-      # - scan-backend:
-      #     context: udapeople
-      #     requires: [build-backend]
+      - scan-backend:
+          context: udapeople
+          requires: [build-backend]
       # - deploy-infrastructure:
       #     context: udapeople
       #     requires: [test-frontend,test-backend,scan-frontend,scan-backend]
