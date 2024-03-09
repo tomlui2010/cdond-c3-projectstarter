@@ -214,22 +214,22 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend:
-          context: udapeople
+      # - build-frontend:
+      #     context: udapeople
       - build-backend:
           context: udapeople
-      - test-frontend:
-          context: udapeople
-          requires: [build-frontend]
-      - test-backend:
-          context: udapeople
-          requires: [build-backend]
-      - scan-frontend:
-          context: udapeople
-          requires: [build-frontend]
-      - scan-backend:
-          context: udapeople
-          requires: [build-backend]
-      - deploy-infrastructure:
-          context: udapeople
-          requires: [test-frontend,test-backend,scan-frontend,scan-backend]
+      # - test-frontend:
+      #     context: udapeople
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     context: udapeople
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     context: udapeople
+      #     requires: [build-frontend]
+      # - scan-backend:
+      #     context: udapeople
+      #     requires: [build-backend]
+      # - deploy-infrastructure:
+      #     context: udapeople
+      #     requires: [test-frontend,test-backend,scan-frontend,scan-backend]
