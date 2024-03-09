@@ -157,7 +157,7 @@ jobs:
           name: Check for known vulnerabilities in backend code
           command: |
             cd backend
-            npm install typeorm@0.2.25 --force
+            npm install typeorm@0.2.25 minimist@0.2.4 --force
             npm audit fix --force
       - slack/notify:
           event: fail
