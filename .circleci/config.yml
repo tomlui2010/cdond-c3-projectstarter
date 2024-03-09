@@ -135,10 +135,9 @@ jobs:
           name: Checking for known vulnerabilities in frontend
           command: |
             cd frontend
-            npm install
-            npm audit --audit-level=critical > /dev/null 2>&1
-            npm audit --audit-level=high > audit_report.txt 2>&1
-            grep -v "critical" audit_report.txt
+            npm install --force
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
       - slack/notify:
           event: fail
           channel: "personal-projects"
@@ -214,19 +213,19 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend:
-      #     context: udapeople
+      - build-frontend:
+          context: udapeople
       - build-backend:
           context: udapeople
-      # - test-frontend:
-      #     context: udapeople
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     context: udapeople
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     context: udapeople
-      #     requires: [build-frontend]
+      - test-frontend:
+          context: udapeople
+          requires: [build-frontend]
+      - test-backend:
+          context: udapeople
+          requires: [build-backend]
+      - scan-frontend:
+          context: udapeople
+          requires: [build-frontend]
       - scan-backend:
           context: udapeople
           requires: [build-backend]
