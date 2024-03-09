@@ -136,7 +136,8 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm audit --audit-level=high > audit_report.txt
+            npm audit --audit-level=critical > /dev/null 2>&1
+            npm audit --audit-level=high > audit_report.txt 2>&1
             grep -v "critical" audit_report.txt
       - slack/notify:
           event: fail
@@ -156,8 +157,9 @@ jobs:
           name: Check for known vulnerabilities in backend code
           command: |
             cd backend
-            npm install 
-            npm audit --audit-level=high > audit_report.txt
+            npm install
+            npm audit --audit-level=critical > /dev/null 2>&1
+            npm audit --audit-level=high > audit_report.txt 2>&1
             grep -v "critical" audit_report.txt
       - slack/notify:
           event: fail
