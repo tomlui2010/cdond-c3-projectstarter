@@ -158,7 +158,7 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --force > /dev/null 2>&1
+            npm audit fix --force
             npm audit --audit-level=high > audit_report.txt 2>&1
             grep -v "critical" audit_report.txt
       - slack/notify:
