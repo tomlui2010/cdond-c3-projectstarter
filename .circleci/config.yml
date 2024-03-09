@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  slack: circleci/slack@4.13.1
  
 commands:
   destroy-environment:
@@ -28,14 +26,16 @@ commands:
           # Add when this will run
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
-            then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
+            SUCCESS=1
+            if (( $SUCCESS == 1 )); then
+              # cd ~/project/backend
+              # npm install
+              # Add revert code here. You can find this in the Getting Started section.
               exit 1
             fi
+
+orbs:
+  slack: circleci/slack@4.13.1
 
 jobs:
   build-frontend:
@@ -206,7 +206,10 @@ jobs:
           root: /tmp
           paths: 
             - inventory.txt
-      - destroy_environment
+      - destroy-environment:
+          parameters:
+            frontend-stackname: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+            backend-stackname: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
 
 workflows:
   default:
