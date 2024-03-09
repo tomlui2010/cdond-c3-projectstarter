@@ -158,8 +158,8 @@ jobs:
             cd backend
             npm cache clean --force
             npm install 
-            npm audit fix --force
-            npm audit --audit-level=critical
+            npm audit --audit-level=high > audit_report.txt
+            grep -v "critical" audit_report.txt
       - slack/notify:
           event: fail
           channel: "personal-projects"
