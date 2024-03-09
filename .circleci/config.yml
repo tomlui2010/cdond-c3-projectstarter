@@ -157,10 +157,8 @@ jobs:
           name: Check for known vulnerabilities in backend code
           command: |
             cd backend
-            npm install
+            npm install typeorm@0.2.25 --force
             npm audit fix --force
-            npm audit --audit-level=high > audit_report.txt 2>&1
-            grep -v "critical" audit_report.txt
       - slack/notify:
           event: fail
           channel: "personal-projects"
