@@ -89,9 +89,9 @@
     "webpack-cli": "^3.3.11",
     "webpack-node-externals": "^1.7.2"
   },
-  "overrides": {
-    "typeorm": "0.2.25"
-  },
+  // "overrides": {
+  //   "minimist": "0.2.25"
+  // },
   "jest": {
     "moduleFileExtensions": [
       "js",
