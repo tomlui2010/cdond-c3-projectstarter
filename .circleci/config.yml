@@ -2,6 +2,41 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.13.1
  
+commands:
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      frontend-stackname:
+        type: string
+      backend-stackname:
+        type: string
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name <<parameters.frontend-stackname>>
+            aws cloudformation delete-stack --stack-name <<parameters.backend-stackname>>
+
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here     
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          command: |
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            SUCCESS = 1
+            if(( $SUCCESS==1 )); 
+            then
+            #  cd ~/project/backend
+            #  npm install
+            #  Add revert code here. You can find this in the Getting Started section.
+              exit 1
+            fi
+
 jobs:
   build-frontend:
     docker:
@@ -131,6 +166,48 @@ jobs:
           template: basic_fail_1
           debug: false
 
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install tar and gzip
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y tar gzip
+      - run:
+          name: Cloudformation script to create backend
+          command: |
+             aws cloudformation deploy  \
+              --template-file .circleci/files/backend.yml  \
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
+      - run:
+          name: Cloudformation script to create frontend
+          command: |
+             aws cloudformation deploy  \
+              --template-file .circleci/files/frontend.yml  \
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"  \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
+      - run:
+          name: Create inventory file for ansible
+          command: |
+             echo "[backend_server]" > /tmp/inventory.txt
+             echo "Waiting for the EC2 instance to be in the running state..."
+             INSTANCE_IDS=$(aws ec2 describe-instances --query 'Reservations[*].Instances[?State.Name != `terminated`].InstanceId' --output json)
+             INSTANCE_ID=$(echo $INSTANCE_IDS | jq -r 'flatten | select(. != null)[] | select(length > 0)' )
+             echo "Instance ID: $INSTANCE_ID"
+             PUBLIC_IP=$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
+             echo "$PUBLIC_IP" >> /tmp/inventory.txt
+      - persist_to_workspace:
+          root: /tmp
+          paths: 
+            - inventory.txt
+      - destroy_environment
+
 workflows:
   default:
     jobs:
@@ -150,3 +227,6 @@ workflows:
       - scan-backend:
           context: udapeople
           requires: [build-backend]
+      - deploy-infrastructure:
+          context: udapeople
+          requires: [test-frontend,test-backend,scan-frontend,scan-backend]
