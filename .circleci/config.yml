@@ -135,9 +135,8 @@ jobs:
           name: Checking for known vulnerabilities in frontend
           command: |
             cd frontend
-            npm install 
-            npm install lodash@latest
-            npm audit fix --audit-level=critical --force
+            npm install
+            npm audit fix --force
             npm audit --audit-level=critical
       - slack/notify:
           event: fail
@@ -158,7 +157,7 @@ jobs:
           command: |
             cd backend
             npm install 
-            npm audit fix --audit-level=critical --force
+            npm audit fix --force
             npm audit --audit-level=critical
       - slack/notify:
           event: fail
