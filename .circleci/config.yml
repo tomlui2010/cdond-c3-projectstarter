@@ -178,6 +178,7 @@ jobs:
           command: |
             yum update -y
             yum install -y tar gzip
+            yum install -y jq
       - run:
           name: Cloudformation script to create backend
           command: |
