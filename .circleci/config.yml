@@ -13,8 +13,8 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name $parameters.frontend-stackname -vvv
-            aws cloudformation delete-stack --stack-name $parameters.backend-stackname -vvv
+            aws cloudformation delete-stack --stack-name $parameters.frontend-stackname --debug
+            aws cloudformation delete-stack --stack-name $parameters.backend-stackname --debug
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -171,11 +171,11 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      # - run:
-      #     name: Install tar and gzip
-      #     command: |
-      #       sudo apt-get update
-      #       sudo apt-get install -y tar gzip
+      - run:
+          name: Install tar and gzip
+          command: |
+            yum update -y
+            yum install -y tar gzip
       - run:
           name: Cloudformation script to create backend
           command: |
