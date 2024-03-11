@@ -13,8 +13,8 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name $parameters.frontend-stackname --debug
-            aws cloudformation delete-stack --stack-name $parameters.backend-stackname --debug
+            aws cloudformation delete-stack --stack-name $<< parameters.backend-stackname >>--debug
+            aws cloudformation delete-stack --stack-name $<< parameters.backend-stackname >> --debug
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -209,6 +209,12 @@ jobs:
       - destroy-environment:
           frontend-stackname: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
           backend-stackname: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+      - slack/notify:
+          event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
+          template: basic_fail_1
+          debug: false
 
 workflows:
   default:
