@@ -13,8 +13,10 @@ commands:
           name: Delete backend and frontend stack on fail
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name "${frontend-stackname}"--debug
+            echo ${backend-stackname}
             aws cloudformation delete-stack --stack-name "${backend-stackname}" --debug
+            echo ${frontend-stackname}
+            aws cloudformation delete-stack --stack-name "${frontend-stackname}"--debug
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
