@@ -187,7 +187,8 @@ jobs:
               --tags project=udapeople
              DEPLOY_EXIT_CODE=$?
              if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
-              aws cloudformation describe-stack-events --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+              aws cloudformation describe-stack-events --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" >> /tmp/backend-output.txt
+              cat /tmp/backend-output.txt
               exit 1
              fi
              set -e
@@ -202,7 +203,8 @@ jobs:
               --tags project=udapeople
              DEPLOY_EXIT_CODE=$?
              if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
-              aws cloudformation describe-stack-events --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+              aws cloudformation describe-stack-events --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" >> /tmp/frontend-output.txt
+              cat /tmp/frontend-output.txt
               exit 1
              fi
              set -e
