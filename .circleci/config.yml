@@ -10,11 +10,11 @@ commands:
         type: string
     steps:
       - run:
-          name: Destroy environments
+          name: Delete backend stack
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name $<< parameters.backend-stackname >>--debug
-            aws cloudformation delete-stack --stack-name $<< parameters.backend-stackname >> --debug
+            aws cloudformation delete-stack --stack-name "${frontend-stackname}"--debug
+            aws cloudformation delete-stack --stack-name "${backend-stackname}" >> --debug
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -179,19 +179,31 @@ jobs:
       - run:
           name: Cloudformation script to create backend
           command: |
+             set +e
              aws cloudformation deploy  \
               --template-file .circleci/files/backend.yml  \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
+             DEPLOY_EXIT_CODE=$?
+             if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
+              aws cloudformation describe-stack-events --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+             fi
+             set -e
       - run:
           name: Cloudformation script to create frontend
           command: |
+             set +e
              aws cloudformation deploy  \
               --template-file .circleci/files/frontend.yml  \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"  \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
+             DEPLOY_EXIT_CODE=$?
+             if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
+              aws cloudformation describe-stack-events --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+             fi
+             set -e
       - run:
           name: Create inventory file for ansible
           command: |
@@ -207,8 +219,8 @@ jobs:
           paths: 
             - inventory.txt
       - destroy-environment:
-          frontend-stackname: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
-          backend-stackname: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - slack/notify:
           event: fail
           channel: "personal-projects"
