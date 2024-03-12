@@ -28,7 +28,7 @@
 
   tasks:
     - name: Set environment variables
-      command: cat /etc/environment
+      command: printenv
       environment:
         TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
         TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES') }}"
@@ -39,6 +39,8 @@
         TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
         TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS') }}"
         TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR') }}"
+    - name: Check value of TYPEORM_CONNECTION environment variable
+      command: echo $TYPEORM_CONNECTION
  
   roles:
     - common
