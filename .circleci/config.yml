@@ -252,10 +252,11 @@ jobs:
       - run:
           name: Configure server
           command: |
-            pwd
-            cd /root/projects/.circleci/ansible
+            cd /root/project/.circleci/ansible
             ansible-playbook -i /tmp/inventory.txt configure-server.yml
-      # Here's where you will add some code to rollback on failure      
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 workflows:
   default:
     jobs:
