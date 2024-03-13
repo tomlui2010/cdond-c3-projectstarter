@@ -52,6 +52,6 @@
       shell: printenv
  
 # Include common and configure-server roles
-roles:
-  - common
-  - configure-server
+  roles:
+    - common
+    - configure-server
