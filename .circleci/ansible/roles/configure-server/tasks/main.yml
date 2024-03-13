@@ -1,14 +1,15 @@
 ---
-- name: install npm && nodejs
-  package: 
-    name: "{{item}}"
+# Task to install npm and nodejs packages
+- name: "Install npm and Node.js"
+  package:
+    name: "{{ item }}"
     state: present
   loop:
     - nodejs
     - npm
 
-- name: install pm2 globally
-  npm: 
+# Task to install pm2 globally using npm
+- name: "Install pm2 globally"
+  npm:
     name: pm2
     global: yes
-

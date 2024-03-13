@@ -1,18 +1,23 @@
 ---
-- name: "configuration play." 
+# Configuration play to set up environment variables on the target machine
+
+- name: "Configuration Play"
   hosts: WEB
   user: ubuntu
   become: true
   become_method: sudo
-  become_user: root  
+  become_user: root
   gather_facts: false
+
+  # Define Ansible variables
   vars:
     - ansible_python_interpreter: /usr/bin/python3
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
 
+  # Pre-tasks to prepare the target machine
   pre_tasks:
-    - name: "wait 600 seconds for target connection to become reachable/usable"
+    - name: "Wait 600 seconds for target connection to become reachable/usable"
       wait_for_connection:
         delay: 60
         timeout: 600
@@ -21,13 +26,14 @@
       apt:
         update_cache: yes
 
-    - name: "install Python for Ansible"
+    - name: "Install Python for Ansible"
       apt:
         name: python3
         state: present
 
+  # Tasks to set environment variables and print them
   tasks:
-    - name: Append environment variables to /etc/environment
+    - name: "Append environment variables to /etc/environment"
       become: yes
       blockinfile:
         path: /etc/environment
@@ -41,9 +47,11 @@
           TYPEORM_DATABASE={{ lookup('env', 'TYPEORM_DATABASE') }}
           TYPEORM_MIGRATIONS={{ lookup('env', 'TYPEORM_MIGRATIONS') }}
           TYPEORM_MIGRATIONS_DIR={{ lookup('env', 'TYPEORM_MIGRATIONS_DIR') }}
- 
-  roles:
-    - common
-    - configure-server
-  
 
+    - name: "Print environment variables"
+      shell: printenv
+ 
+# Include common and configure-server roles
+roles:
+  - common
+  - configure-server

@@ -1,10 +1,12 @@
 ---
-- name: "update apt packages."
+# Task to update apt packages
+- name: "Update apt packages"
   become: yes
   apt:
     update_cache: yes
 
-- name: "upgrade packages"
+# Task to upgrade packages
+- name: "Upgrade packages"
   become: yes
   apt:
     upgrade: yes
