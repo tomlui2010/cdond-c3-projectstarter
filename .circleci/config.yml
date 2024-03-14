@@ -269,10 +269,14 @@ jobs:
           keys: [backend-build]
       - run:
           name: Install npm 
-          command: apt update && apt install -y npm
+          command: | 
+            yum update -y 
+            yum install -y npm
       - run:
           name: Install nodejs 
-          command: apt update && apt install -y nodejs
+          command: |
+            yum update -y 
+            yum install -y nodejs
       - run:
           name: Run migrations
           command: |
@@ -301,19 +305,27 @@ jobs:
           at: /tmp
       - run:
           name: Install npm
-          command: apt update && apt install -y npm
+          command: |
+            yum update -y 
+            yum install -y npm
 
       - run:
           name: Install nodejs
-          command: apt update && apt install -y nodejs
+          command: |
+            yum update -y 
+            yum install -y nodejs
 
       - run:
           name: Install ansible
-          command: apt update && apt install -y ansible
+          command: |
+            yum update -y 
+            yum install -y ansible
 
       - run:
           name: Install python
-          command: apt update && apt install -y python3 python3-pip
+          command: |
+            yum update -y
+            yum install y python3
             
       - run:
           name: Get backend url
