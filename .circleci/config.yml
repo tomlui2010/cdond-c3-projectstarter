@@ -262,21 +262,22 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:16.20.1
+      - image: amazon/aws-cli
     steps:
       - checkout
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Install AWS CLI
-          command: |
-            echo "Installing aws cli to setup teardown step"
-            npm install aws-cli
+          name: Install npm 
+          command: apt update && apt install -y npm
+      - run:
+          name: Install nodejs 
+          command: apt update && apt install -y nodejs
       - run:
           name: Run migrations
           command: |
             cd backend
-            npm install
+            npm install typeorm@0.2.25 mkdirp@0.5.6 --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
             npm run migrations > migrations_dump.txt
