@@ -259,6 +259,119 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+
+  run-migrations:
+    docker:
+      - image: cimg/node:16.20.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Install AWS CLI
+          command: |
+            echo "Installing aws cli to setup teardown step"
+            npm install aws-cli
+      - run:
+          name: Run migrations
+          command: |
+            cd backend
+            npm install
+            npm run migrations > migrations_dump.txt
+      - run:
+          name: Send migration results to memstash
+          command: |
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then
+              curl https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+            fi
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"     
+
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Install npm
+          command: apt update && apt install -y npm
+
+      - run:
+          name: Install nodejs
+          command: apt update && apt install -y nodejs
+
+      - run:
+          name: Install ansible
+          command: apt update && apt install -y ansible
+
+      - run:
+          name: Install python
+          command: apt update && apt install -y python3 python3-pip
+            
+      - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP=$(grep -oP '(?<=\[WEB\]\n).*' /tmp/inventory.txt | awk '{print $1}')
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo API_URL = "${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+
+  deploy-backend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["SHA256:rSkE7Rn1dRmpwmGBL4GprFdypzehyStRtsCch1owNhw"]
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Install npm
+          command: apt update && apt install -y npm
+
+      - run:
+          name: Install nodejs
+          command: apt update && apt install -y nodejs
+
+      - run:
+          name: Install ansible
+          command: apt update && apt install -y ansible
+
+      - run:
+          name: Install ar gzip
+          command: apt update && apt install -y tar gzip
+
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            cat /tmp/inventory.txt
+            ansible-playbook -i /tmp/inventory.txt deploy-backend.yml
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+
 workflows:
   default:
     jobs:
@@ -284,3 +397,12 @@ workflows:
       - configure-infrastructure:
           context: udapeople
           requires: [deploy-infrastructure]
+      - run-migrations:
+           context: udapeople
+          requires: [configure-infrastructure]
+      - deploy-backend:
+           context: udapeople
+          requires: [run-migrations]
+      - deploy-frontend:
+           context: udapeople
+          requires: [deploy-backend]

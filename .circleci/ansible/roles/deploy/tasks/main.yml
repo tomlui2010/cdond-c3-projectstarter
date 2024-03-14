@@ -1,3 +1,3 @@
 ---
 - name: Set environment variables
-  shell:  pm2 start npm --name "udapeople-backen" -- start
+  shell:  npm install && pm2 stop default && pm2 start npm --name "udapeople-backend" -- start
