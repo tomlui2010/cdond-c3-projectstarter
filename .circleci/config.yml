@@ -304,6 +304,10 @@ jobs:
       - attach_workspace:
           at: /tmp
       - run:
+          name: Enable EPEL repository
+          command: yum install -y epel-release
+
+      - run:
           name: Install npm
           command: |
             yum update -y 
