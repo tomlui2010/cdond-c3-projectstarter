@@ -262,24 +262,14 @@ jobs:
 
   run-migrations:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/node:16.20.1
     steps:
       - checkout
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Enable EPEL repository
-          command: yum install -y epel-release
-      - run:
-          name: Install npm 
-          command: | 
-            yum update -y 
-            yum install -y npm
-      - run:
-          name: Install nodejs 
-          command: |
-            yum update -y 
-            yum install -y nodejs
+          name: Install awscli
+          command: yum install -y aws-cli
       - run:
           name: Run migrations
           command: |
