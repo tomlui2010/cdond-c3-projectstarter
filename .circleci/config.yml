@@ -286,38 +286,35 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/node:16.20.1
     steps:
       - checkout
       - attach_workspace:
           at: /tmp
-      - run:
-          name: Enable EPEL repository
-          command: yum install -y epel-release
 
-      - run:
-          name: Install npm
-          command: |
-            yum update -y 
-            yum install -y npm
+      # - run:
+      #     name: Install npm
+      #     command: |
+      #       yum update -y 
+      #       yum install -y npm
 
-      - run:
-          name: Install nodejs
-          command: |
-            yum update -y 
-            yum install -y nodejs
+      # - run:
+      #     name: Install nodejs
+      #     command: |
+      #       yum update -y 
+      #       yum install -y nodejs
 
-      - run:
-          name: Install ansible
-          command: |
-            yum update -y 
-            yum install -y ansible
+      # - run:
+      #     name: Install ansible
+      #     command: |
+      #       yum update -y 
+      #       yum install -y ansible
 
-      - run:
-          name: Install python
-          command: |
-            yum update -y
-            yum install y python3
+      # - run:
+      #     name: Install python
+      #     command: |
+      #       yum update -y
+      #       yum install y python3
             
       - run:
           name: Get backend url
@@ -341,14 +338,11 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/node:16.20.1
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["SHA256:rSkE7Rn1dRmpwmGBL4GprFdypzehyStRtsCch1owNhw"]
-      - run:
-          name: Enable EPEL repository
-          command: yum install -y epel-release
 
       - run:
           name: Install npm
