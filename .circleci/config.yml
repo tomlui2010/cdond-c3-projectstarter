@@ -398,11 +398,11 @@ workflows:
           context: udapeople
           requires: [deploy-infrastructure]
       - run-migrations:
-           context: udapeople
+          context: udapeople
           requires: [configure-infrastructure]
       - deploy-backend:
-           context: udapeople
+          context: udapeople
           requires: [run-migrations]
       - deploy-frontend:
-           context: udapeople
+          context: udapeople
           requires: [deploy-backend]
