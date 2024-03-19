@@ -350,6 +350,7 @@ jobs:
           name: Install npm nodejs
           command: | 
              apk update && apk add --no-cache nodejs npm
+             apk update && apk add --no-cache openssh-client
 
       - run:
           name: Install ansible
