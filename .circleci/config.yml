@@ -311,16 +311,20 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(grep -oP '(?<=\[WEB\]\n).*' /tmp/inventory.txt | awk '{print $1}')
+            export BACKEND_IP=$(export BACKEND_IP=$(sed -n '/^\[WEB\]/{n;p;q}' /tmp/inventory.txt)
+            if [ -z "$BACKEND_IP" ]; then
+              echo "Error: BACKEND_IP is empty. Exiting."
+              exit 1
+            fi
             export API_URL="http://${BACKEND_IP}:3030"
-            echo API_URL = "${API_URL}"
-            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            echo "API_URL = ${API_URL}"
+            echo "API_URL=http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
             cd frontend
-            npm install
+            npm install typescript@latest --save-dev
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
