@@ -260,6 +260,12 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      - slack/notify:
+          event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
+          template: basic_fail_1
+          debug: false
 
   run-migrations:
     docker:
@@ -281,9 +287,15 @@ jobs:
             then
               curl https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-      # - destroy-environment:
-      #     frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-      #     backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"     
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"     
+      - slack/notify:
+          event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
+          template: basic_fail_1
+          debug: false
 
   deploy-frontend:
     docker:
@@ -331,7 +343,14 @@ jobs:
 
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
+
+      - slack/notify:
+          event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
+          template: basic_fail_1
+          debug: false 
 
   deploy-backend:
     docker:
@@ -379,6 +398,12 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      - slack/notify:
+          event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
+          template: basic_fail_1
+          debug: false
 
 workflows:
   default:
