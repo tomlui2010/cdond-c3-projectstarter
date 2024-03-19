@@ -248,9 +248,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             apk add --update ansible
-             apk add --update openssh
-             apk add --no-cache aws-cli
+             apk update && apk add --no-cache nodejs npm
+             apk update && apk add --no-cache ansible
+             apk update && apk add --no-cache openssh
+             apk update && apk add --no-cache aws-cli
       - run:
           name: Configure server
           command: |
@@ -286,36 +287,27 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: python:3.11-alpine3.19
     steps:
       - checkout
       - attach_workspace:
           at: /tmp
 
-      # - run:
-      #     name: Install npm
-      #     command: |
-      #       yum update -y 
-      #       yum install -y npm
+      - run:
+          name: Install npm nodejs
+          command: | 
+             apk update && apk add --no-cache nodejs npm
 
-      # - run:
-      #     name: Install nodejs
-      #     command: |
-      #       yum update -y 
-      #       yum install -y nodejs
+      - run:
+          name: Install tar gzip
+          command: | 
+            apt update && apt install -y tar gzip
 
-      # - run:
-      #     name: Install ansible
-      #     command: |
-      #       yum update -y 
-      #       yum install -y ansible
+      - run:
+          name: Install aws-cli
+          command: | 
+             apk update && apk add --no-cache aws-cli
 
-      # - run:
-      #     name: Install python
-      #     command: |
-      #       yum update -y
-      #       yum install y python3
-            
       - run:
           name: Get backend url
           command: |
@@ -332,33 +324,39 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
   deploy-backend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: python:3.11-alpine3.19
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["SHA256:rSkE7Rn1dRmpwmGBL4GprFdypzehyStRtsCch1owNhw"]
 
       - run:
-          name: Install npm
-          command: apt update && apt install -y npm
-
-      - run:
-          name: Install nodejs
-          command: apt update && apt install -y nodejs
+          name: Install npm nodejs
+          command: | 
+             apk update && apk add --no-cache nodejs npm
 
       - run:
           name: Install ansible
-          command: apt update && apt install -y ansible
+          command: |
+            apk update && apk add --no-cache ansible
+
 
       - run:
           name: Install tar gzip
-          command: apt update && apt install -y tar gzip
+          command: | 
+            apt update && apt install -y tar gzip
+
+      - run:
+          name: Install aws-cli
+          command: | 
+             apk update && apk add --no-cache aws-cli
 
       - attach_workspace:
           at: /tmp
