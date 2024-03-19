@@ -1,8 +1,7 @@
-- name: Set environment variables
+- name: Install npm
   become: yes
-  npm:
-    name: udapeople-backend
-    global: yes
+  package:
+    name: npm
     state: present
 
 - name: Stop default PM2 process
