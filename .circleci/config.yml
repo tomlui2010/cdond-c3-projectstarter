@@ -294,6 +294,11 @@ jobs:
           at: /tmp
 
       - run:
+          name: Install aws-cli
+          command: | 
+             apk update && apk add --no-cache aws-cli
+
+      - run:
           name: Install npm nodejs
           command: | 
              apk update && apk add --no-cache nodejs npm
@@ -301,12 +306,7 @@ jobs:
       - run:
           name: Install tar gzip
           command: | 
-            apt update && apt install -y tar gzip
-
-      - run:
-          name: Install aws-cli
-          command: | 
-             apk update && apk add --no-cache aws-cli
+            apk update && apk add --no-cache tar gzip
 
       - run:
           name: Get backend url
@@ -338,6 +338,11 @@ jobs:
           fingerprints: ["SHA256:eDbttsqNzxpGU/ABAMGtS89lJn1C+EM/B7x8xNCoDuw"]
 
       - run:
+          name: Install aws-cli
+          command: | 
+             apk update && apk add --no-cache aws-cli
+
+      - run:
           name: Install npm nodejs
           command: | 
              apk update && apk add --no-cache nodejs npm
@@ -347,16 +352,10 @@ jobs:
           command: |
             apk update && apk add --no-cache ansible
 
-
       - run:
           name: Install tar gzip
           command: | 
-            apt update && apt install -y tar gzip
-
-      - run:
-          name: Install aws-cli
-          command: | 
-             apk update && apk add --no-cache aws-cli
+            apk update && apk add --no-cache tar gzip
 
       - attach_workspace:
           at: /tmp
