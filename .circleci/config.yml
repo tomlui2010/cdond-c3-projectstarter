@@ -311,7 +311,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(export BACKEND_IP=$(sed -n '/^\[WEB\]/{n;p;q}' /tmp/inventory.txt))
+            BACKEND_IP=$(sed -n '/^\[WEB\]/{n;p;q}' /tmp/inventory.txt)
             if [ -z "$BACKEND_IP" ]; then
               echo "Error: BACKEND_IP is empty. Exiting."
               exit 1
