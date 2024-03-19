@@ -242,7 +242,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["SHA256:rSkE7Rn1dRmpwmGBL4GprFdypzehyStRtsCch1owNhw"]
+          fingerprints: ["SHA256:eDbttsqNzxpGU/ABAMGtS89lJn1C+EM/B7x8xNCoDuw"]
       - attach_workspace:
           at: /tmp
       - run:
@@ -335,7 +335,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["SHA256:rSkE7Rn1dRmpwmGBL4GprFdypzehyStRtsCch1owNhw"]
+          fingerprints: ["SHA256:eDbttsqNzxpGU/ABAMGtS89lJn1C+EM/B7x8xNCoDuw"]
 
       - run:
           name: Install npm nodejs
