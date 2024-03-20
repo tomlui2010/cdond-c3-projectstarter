@@ -3,6 +3,10 @@
     src: /root/project/artifact.tar.gz
     dest: /home/ubuntu/artifact.tar.gz
 
+- name: Extract artifact.tar.gz
+  become: yes
+  command: tar -xzvf /home/ubuntu/artifact.tar.gz -C /home/ubuntu
+
 - name: Install npm
   become: yes
   package:
