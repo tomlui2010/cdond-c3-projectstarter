@@ -2,7 +2,7 @@
   copy:
     src: /root/project/artifact.tar.gz
     dest: /home/ubuntu/artifact.tar.gz
-    
+
 - name: Install npm
   become: yes
   package:
@@ -22,5 +22,3 @@
 - name: Start PM2 process
   become: yes
   command: pm2 start npm  -- start
-  args: 
-    chdir: /home/ubuntu/artifact.tar.gz
