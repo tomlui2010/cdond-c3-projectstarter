@@ -5,7 +5,9 @@
 
 - name: Extract artifact.tar.gz
   become: yes
-  command: tar -xzvf /home/ubuntu/artifact.tar.gz -C /home/ubuntu
+  command: |
+    tar -xzvf /home/ubuntu/artifact.tar.gz -C /home/ubuntu
+    cd backend
 
 - name: Install npm
   become: yes
@@ -14,6 +16,7 @@
     state: present
 
 - name: Check if default PM2 process is running
+  become: yes
   shell: pm2 list | grep -q 'default'
   register: default_pm2_running
   ignore_errors: true
