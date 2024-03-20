@@ -396,9 +396,9 @@ jobs:
             cat /tmp/inventory.txt
             ansible-playbook -i /tmp/inventory.txt deploy-backend.yml
 
-      - destroy-environment:
-          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      # - destroy-environment:
+      #     frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+      #     backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
       - slack/notify:
           event: fail
