@@ -4,10 +4,16 @@
     name: npm
     state: present
 
+- name: Check if default PM2 process is running
+  shell: pm2 list | grep -q 'default'
+  register: default_pm2_running
+  ignore_errors: true
+
 - name: Stop default PM2 process
   become: yes
   command: pm2 stop default
+  when: default_pm2_running.rc == 0
 
 - name: Start PM2 process
   become: yes
-  command: pm2 start npm --name "udapeople-backend" -- start
+  command: pm2 start npm  -- start

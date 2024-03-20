@@ -248,7 +248,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             apk update && apk add --no-cache nodejs npm
+             apk update && apk add --no-cache nodejs npm curl
              apk update && apk add --no-cache ansible
              apk update && apk add --no-cache openssh
              apk update && apk add --no-cache aws-cli
@@ -313,7 +313,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs npm
+             apk update && apk add --no-cache nodejs npm curl
 
       - run:
           name: Install tar gzip
@@ -368,7 +368,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs npm
+             apk update && apk add --no-cache nodejs npm curl
              apk update && apk add --no-cache openssh-client
 
       - run:
@@ -395,7 +395,7 @@ jobs:
             cd .circleci/ansible
             cat /tmp/inventory.txt
             ansible-playbook -i /tmp/inventory.txt deploy-backend.yml
-            
+
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
