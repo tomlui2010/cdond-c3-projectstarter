@@ -17,3 +17,5 @@
 - name: Start PM2 process
   become: yes
   command: pm2 start npm  -- start
+  args: 
+    chdir: /home/ubuntu/artifact.tar.gz
