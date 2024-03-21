@@ -284,7 +284,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm run migrations > migrations_dump.txt
-            cat migrations_dump.log
+            cat migrations_dump.txt
       - run:
           name: Send migration results to memstash
           command: |
