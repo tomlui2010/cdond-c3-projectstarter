@@ -390,7 +390,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            cd /home/circleci/project/backend
+            cd backend
             npm install
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
