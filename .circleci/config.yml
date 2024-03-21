@@ -137,7 +137,7 @@ jobs:
           name: Checking for known vulnerabilities in frontend
           command: |
             cd frontend
-            npm install babel-core@7.0.0-bridge.0 --force
+            npm install
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
       - slack/notify:
