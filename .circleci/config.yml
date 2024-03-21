@@ -277,7 +277,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Run migrations
+          name: Run migration script
           command: |
             cd /home/circleci/project/backend
             npm install
