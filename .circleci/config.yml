@@ -307,6 +307,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp
+      - restore_cache:
+          keys: [frontend-build]
 
       - run:
           name: Install aws-cli
@@ -362,6 +364,8 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["SHA256:eDbttsqNzxpGU/ABAMGtS89lJn1C+EM/B7x8xNCoDuw"]
+      - restore_cache:
+          keys: [backend-build]
 
       - run:
           name: Install aws-cli
