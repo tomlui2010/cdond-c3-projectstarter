@@ -250,7 +250,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             apk update && apk add --no-cache nodejs=13.8.0 npm curl
+             apk update && apk add --no-cache nodejs npm curl
              apk update && apk add --no-cache ansible
              apk update && apk add --no-cache openssh
              apk update && apk add --no-cache aws-cli
@@ -303,7 +303,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: python:3.11-alpine3.19
+      - image: python:3.11-alpine3.13
     steps:
       - checkout
       - attach_workspace:
@@ -317,7 +317,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs=13.8.0 npm curl
+             apk update && apk add --no-cache nodejs=13.8.0-r0 npm curl
 
       - run:
           name: Install tar gzip
@@ -358,7 +358,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.11-alpine3.19
+      - image: python:3.11-alpine3.13
     steps:
       - checkout
       - add_ssh_keys:
@@ -372,7 +372,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs=13.8.0 npm curl
+             apk update && apk add --no-cache nodejs=13.8.0-r0 npm curl
              apk update && apk add --no-cache openssh-client
 
       - run:
