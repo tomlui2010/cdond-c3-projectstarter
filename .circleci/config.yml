@@ -316,7 +316,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs=13.8.0-r0 npm curl
+             apk update && apk add --no-cache nodejs npm curl
 
       - run:
           name: Install tar gzip
@@ -371,7 +371,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs=13.8.0-r0 npm curl
+             apk update && apk add --no-cache nodejs npm curl
              apk update && apk add --no-cache openssh-client
 
       - run:
