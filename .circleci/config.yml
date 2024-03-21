@@ -281,8 +281,6 @@ jobs:
           command: |
             cd /home/circleci/project/backend
             npm install
-            npm audit fix --audit-level=critical --force
-            npm audit fix --audit-level=critical --force
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
