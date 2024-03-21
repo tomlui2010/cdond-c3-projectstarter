@@ -42,7 +42,7 @@ orbs:
 jobs:
   build-frontend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -65,7 +65,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -88,7 +88,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -108,7 +108,7 @@ jobs:
                 
   test-backend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -128,7 +128,7 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -149,7 +149,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: cimg/node:16.20.1
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -248,7 +248,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             apk update && apk add --no-cache nodejs npm curl
+             apk update && apk add --no-cache nodejs=13.8.0 npm curl
              apk update && apk add --no-cache ansible
              apk update && apk add --no-cache openssh
              apk update && apk add --no-cache aws-cli
@@ -269,7 +269,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:16.20.1
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -277,7 +277,7 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            cd backend
+            cd project/backend
             npm install
             npm run migrations > migrations_dump.txt
       - run:
@@ -313,7 +313,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs npm curl
+             apk update && apk add --no-cache nodejs=13.8.0 npm curl
 
       - run:
           name: Install tar gzip
@@ -368,7 +368,7 @@ jobs:
       - run:
           name: Install npm nodejs
           command: | 
-             apk update && apk add --no-cache nodejs npm curl
+             apk update && apk add --no-cache nodejs=13.8.0 npm curl
              apk update && apk add --no-cache openssh-client
 
       - run:
