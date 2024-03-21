@@ -47,9 +47,11 @@
           TYPEORM_DATABASE={{ lookup('env', 'TYPEORM_DATABASE') }}
           TYPEORM_MIGRATIONS={{ lookup('env', 'TYPEORM_MIGRATIONS') }}
           TYPEORM_MIGRATIONS_DIR={{ lookup('env', 'TYPEORM_MIGRATIONS_DIR') }}
+          TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
+          TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
 
     - name: "Print environment variables"
-      shell: printenv
+      shell: printenv | grep "TYPEORM"
  
 # Include common and configure-server roles
   roles:
