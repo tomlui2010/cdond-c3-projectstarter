@@ -279,8 +279,10 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            cd project/backend
+            cd /home/circleci/project/backend
             npm install
+            npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to memstash
@@ -389,8 +391,10 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            cd backend
-            npm i
+            cd /home/circleci/project/backend
+            npm install
+            npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
@@ -428,18 +432,18 @@ workflows:
       - scan-backend:
           context: udapeople
           requires: [build-backend]
-      # - deploy-infrastructure:
-      #     context: udapeople
-      #     requires: [test-frontend,test-backend,scan-frontend,scan-backend]
-      # - configure-infrastructure:
-      #     context: udapeople
-      #     requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     context: udapeople
-      #     requires: [configure-infrastructure]
-      # - deploy-backend:
-      #     context: udapeople
-      #     requires: [run-migrations]
-      # - deploy-frontend:
-      #     context: udapeople
-      #     requires: [deploy-backend]
+      - deploy-infrastructure:
+          context: udapeople
+          requires: [test-frontend,test-backend,scan-frontend,scan-backend]
+      - configure-infrastructure:
+          context: udapeople
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          context: udapeople
+          requires: [configure-infrastructure]
+      - deploy-backend:
+          context: udapeople
+          requires: [run-migrations]
+      - deploy-frontend:
+          context: udapeople
+          requires: [deploy-backend]
