@@ -31,7 +31,7 @@ commands:
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             export SUCCESS=$(curl --insecure  $kvdb_io_url)
             echo $SUCCESS
-            if [ $SUCCESS -eq "1" ]
+            if [ $SUCCESS == "1" ];
             then
               cd backend
               npm install
@@ -263,6 +263,8 @@ jobs:
             if grep -q "has been executed successfully." /home/circleci/project/backend/migrations_dump.txt
             then
               curl https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              export SUCCESS=$(curl --insecure  $kvdb_io_url)
+              echo $SUCCESS
             fi
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
