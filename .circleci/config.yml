@@ -14,6 +14,8 @@ commands:
           command: |
             echo << parameters.backend-stackname >>
             aws cloudformation delete-stack --stack-name << parameters.backend-stackname >> --debug
+            echo "Deleting S3 bucket contents"
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             echo << parameters.frontend-stackname >>
             aws cloudformation delete-stack --stack-name << parameters.frontend-stackname >> --debug
 
@@ -35,6 +37,16 @@ commands:
               npm run migration:revert
               exit 1
             fi
+  
+  failure-notification-slack:
+    description: Slack failure notification when job fails
+    steps:
+      - slack/notify:
+          event: fail
+          channel: "personal-projects"
+          mentions: "<@U06NLJDPAAG>"
+          template: basic_fail_1
+          debug: false
 
 orbs:
   slack: circleci/slack@4.13.1
@@ -56,12 +68,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
+
 
   build-backend:
     docker:
@@ -79,12 +87,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   test-frontend:
     docker:
@@ -99,12 +102,7 @@ jobs:
             cd /home/circleci/project/frontend
             npm install
             npm run test
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
                 
   test-backend:
     docker:
@@ -119,12 +117,7 @@ jobs:
             cd /home/circleci/project/backend
             npm install
             npm run test
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   scan-frontend:
     docker:
@@ -141,12 +134,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   scan-backend:
     docker:
@@ -163,12 +151,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   deploy-infrastructure:
     docker:
@@ -231,12 +214,7 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   configure-infrastructure:
     docker:
@@ -262,12 +240,7 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   run-migrations:
     docker:
@@ -293,12 +266,7 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"     
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   deploy-frontend:
     docker:
@@ -350,12 +318,7 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
 
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false 
+      - failure-notification-slack
 
   deploy-backend:
     docker:
@@ -407,16 +370,11 @@ jobs:
             cat /tmp/inventory.txt
             ansible-playbook -i /tmp/inventory.txt deploy-backend.yml
 
-      # - destroy-environment:
-      #     frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-      #     backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
   smoke-test:
     docker:
@@ -457,8 +415,8 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            
-            if curl "${API_URL}/api/status" | grep "ok"
+            echo "API_URL = ${API_URL}" 
+            if curl -v "${API_URL}/api/status" | grep "ok"
             then
               return 0
             else
@@ -480,12 +438,7 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
-      - slack/notify:
-          event: fail
-          channel: "personal-projects"
-          mentions: "<@U06NLJDPAAG>"
-          template: basic_fail_1
-          debug: false
+      - failure-notification-slack
 
 workflows:
   Udapeople-CICD:
