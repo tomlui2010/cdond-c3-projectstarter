@@ -318,7 +318,8 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
       
-      - revert-migrations
+      - revert-migrations:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
       - failure-notification-slack
 
@@ -376,7 +377,8 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
-      - revert-migrations
+      - revert-migrations:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
       - failure-notification-slack
 
@@ -444,7 +446,8 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
-      - revert-migrations
+      - revert-migrations:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
       - failure-notification-slack
 
