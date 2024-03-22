@@ -29,7 +29,7 @@ commands:
             export kvdb_io_url="https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_${CIRCLE_WORKFLOW_ID:0:7}"
             echo "${kvdb_io_url}"
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl --insecure  $kvdb_io_url)
+            export SUCCESS=$(curl --insecure  $kvdb_io_url)
             echo $SUCCESS
             if [ $SUCCESS -eq "1" ]
             then
