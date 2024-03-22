@@ -30,7 +30,7 @@ commands:
             echo "${kvdb_io_url}"
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             export SUCCESS=$(curl --insecure  $kvdb_io_url)
-            echo $SUCCESS
+            echo "${SUCCESS}"
             if [ $SUCCESS == "1" ];
             then
               cd backend
@@ -70,7 +70,6 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
       - failure-notification-slack
-
 
   build-backend:
     docker:
@@ -264,7 +263,7 @@ jobs:
             then
               curl https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
               export SUCCESS=$(curl --insecure  $kvdb_io_url)
-              echo $SUCCESS
+              echo "${SUCCESS}"
             fi
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
