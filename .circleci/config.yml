@@ -29,10 +29,13 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
+            kvdb_io_url = "https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_<< parameters.workflow_id >>"
+            echo $kvdb_io_url
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             SUCCESS=$(curl --insecure  https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_<< parameters.workflow_id >>)
-            if (( $SUCCESS == 1 )); then
-              cd ~/project/backend
+            echo $SUCCESS
+            if ( $SUCCESS == 1 ); then
+              cd backend
               npm install
               npm run migration:revert
               exit 1
@@ -443,9 +446,9 @@ jobs:
               echo "Frontend deployment issue. Page not loaded successfully"
               return 1
             fi
-      # - destroy-environment:
-      #     frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-      #     backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
