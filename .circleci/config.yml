@@ -440,11 +440,12 @@ jobs:
               echo "failing for Screenshot"
               return 1
             else
+              echo "Frontend deployment issue. Page not loaded successfully"
               return 1
             fi
-      - destroy-environment:
-          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+      # - destroy-environment:
+      #     frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+      #     backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
