@@ -21,24 +21,21 @@ commands:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      workflow_id:
-        type: string
     steps:
       - run:
           name: Revert migrations
           when: on_fail
           command: |
-            kvdb_io_url = "https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_<< parameters.workflow_id >>"
-            echo $kvdb_io_url
+            export kvdb_io_url="https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_${CIRCLE_WORKFLOW_ID:0:7}"
+            echo "${kvdb_io_url}"
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl --insecure  https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_<< parameters.workflow_id >>)
+            SUCCESS=$(curl --insecure  $kvdb_io_url)
             echo $SUCCESS
-            if ( $SUCCESS == 1 ); then
+            if [ $SUCCESS -eq "1" ]
+            then
               cd backend
               npm install
-              npm run migration:revert
-              exit 1
+              npm run migrations:revert
             fi
   
   failure-notification-slack:
@@ -321,8 +318,7 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
       
-      - revert-migrations:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - revert-migrations
 
       - failure-notification-slack
 
@@ -380,8 +376,7 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
-      - revert-migrations:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - revert-migrations
 
       - failure-notification-slack
 
@@ -450,8 +445,7 @@ jobs:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
 
-      - revert-migrations:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - revert-migrations
 
       - failure-notification-slack
 
