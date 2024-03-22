@@ -262,6 +262,7 @@ jobs:
             then
               curl https://kvdb.io/3B2gVGXKughP697PPvG3jh/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
               export SUCCESS=$(curl --insecure  $kvdb_io_url)
+              echo "Success if 1. Curl response is -> "
               echo "${SUCCESS}"
             fi
       - destroy-environment:
