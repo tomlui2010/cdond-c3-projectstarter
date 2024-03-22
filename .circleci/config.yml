@@ -35,6 +35,7 @@ commands:
             then
               cd backend
               npm install
+              echo "Reverting migrations"
               npm run migrations:revert
             fi
   
