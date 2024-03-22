@@ -317,6 +317,8 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      
+      - revert-migrations
 
       - failure-notification-slack
 
@@ -373,6 +375,8 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+
+      - revert-migrations
 
       - failure-notification-slack
 
@@ -431,6 +435,7 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
             # Change this to 0 after the job fails
+              echo "failing for Screenshot"
               return 1
             else
               return 1
@@ -438,6 +443,8 @@ jobs:
       - destroy-environment:
           frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
           backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+
+      - revert-migrations
 
       - failure-notification-slack
 
