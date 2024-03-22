@@ -380,25 +380,22 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.9-alpine3.13
+      - image: cimg/node:13.8.0
     steps:
       - checkout
 
       - run:
-          name: Install aws-cli
-          command: | 
-             apk update && apk add --no-cache aws-cli
-
-      - run:
-          name: Install npm nodejs
-          command: | 
-             apk update && apk add --no-cache nodejs npm curl
-             apk update && apk add --no-cache openssh-client
-
-      - run:
-          name: Install ansible
+          name: Install AWS CLI 
           command: |
-            apk update && apk add --no-cache ansible
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
+            unzip awscli.zip
+            sudo ./aws/install
+
+      - run:
+          name: Install curl
+          command: | 
+             sudo apt install -y tar gzip curl
+
 
       - attach_workspace:
           at: /tmp
