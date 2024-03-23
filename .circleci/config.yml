@@ -432,8 +432,8 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
             # Change this to 0 after the job fails
-              echo "failing for Screenshot"
-              exit 1
+              echo "FRONTEND deployment is successfull"
+              exit 0
             else
               echo "Frontend deployment issue. Page not loaded successfully"
               exit 1
