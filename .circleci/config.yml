@@ -501,7 +501,7 @@ jobs:
       - attach_workspace:
          at: /tmp
       - run:
-          name: Delete old stacks
+          name: Delete old defunct stacks
           command: |
             export OldWorkflowID=$(cat /tmp/OldWorkflowID.txt)
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
