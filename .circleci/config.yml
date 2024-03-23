@@ -446,6 +446,32 @@ jobs:
 
       - failure-notification-slack
 
+  cloudfront-update:
+    docker:
+      - image: cimg/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscli.zip"
+            unzip awscli.zip
+            sudo ./aws/install
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            aws cloudformation deploy --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+
+      - destroy-environment:
+          frontend-stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          backend-stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  
+
+      - revert-migrations
+
+      - failure-notification-slack
+
 workflows:
   Udapeople-CICD:
     jobs:
@@ -483,3 +509,6 @@ workflows:
       - smoke-test:
           context: udapeople
           requires: [deploy-frontend]
+      - cloudfront-update:
+          context: udapeople
+          requires: [smoke-test]
