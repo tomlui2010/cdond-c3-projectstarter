@@ -201,8 +201,7 @@ jobs:
           command: |
              echo "[WEB]" > /tmp/inventory.txt
              echo "Waiting for the EC2 instance to be in the running state..."
-             INSTANCE_IDS=$(aws ec2 describe-instances --query "Reservations[*].Instances[?Tags[?Key=='Name' && Value=='backend-${CIRCLE_WORKFLOW_ID:0:7}']].InstanceId" --output text)
-             INSTANCE_ID=$(echo $INSTANCE_IDS | jq -r 'flatten | select(. != null)[] | select(length > 0)' )
+             INSTANCE_ID=$(aws ec2 describe-instances --query "Reservations[*].Instances[?Tags[?Key=='Name' && Value=='backend-${CIRCLE_WORKFLOW_ID:0:7}']].InstanceId" --output text)
              PUBLIC_IP=$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
              echo "$PUBLIC_IP" >> /root/project/.circleci/ansible/inventory.txt
              echo "$PUBLIC_IP" >> /tmp/inventory.txt
