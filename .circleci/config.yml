@@ -541,6 +541,7 @@ workflows:
       - deploy-infrastructure:
           context: udapeople
           requires: [test-frontend,test-backend,scan-frontend,scan-backend]
+          # Filter to run deploy and subseq jobs only for commits on master
           filters:
             branches:
               only:
