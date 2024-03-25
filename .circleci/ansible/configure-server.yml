@@ -57,3 +57,5 @@
   roles:
     - common
     - configure-server
+    - configure-prometheus-node-exporter
+
